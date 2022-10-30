@@ -93,61 +93,37 @@ def create_heroes():
         logger.info(f"after session: {hero5}")
 
         hero = hero5
+        team = team1
         session.commit()
-        logger.info(f"after commit: {hero}")
+        logger.info(f"after commit: {hero=}, {team=}")
         # logger.info(f"just the name: {hero1.name}")
 
         session.refresh(hero)
-        logger.info(f"after refresh: {hero}")
+        session.refresh(team)
+        logger.info(f"after refresh: {hero=}, {team=}")
     logger.info(f"after session: {hero}")
 
     logger.info("create_heroes done")
 
 
 def select_heroes():
+    logger.info("select heroes")
     with Session(engine) as session:
-        statement = select(Hero).offset(3).limit(3)
+        # statement = select(Hero, Team).where(Hero.team_id == Team.id)
+        statement = (
+            select(Hero, Team).join(Team, isouter=True).where(Team.name == "Avengers")
+        )
         results = session.exec(statement)
-        for hero in results:
-            logger.info(f"hero: {hero}")
-
-
-def update_heroes():
-    with Session(engine) as session:
-        statement = select(Hero).where(Hero.name == "Spiderman")
-        results = session.exec(statement)
-        hero = results.one()
-
-        hero.age = 15
-        session.add(hero)
-        session.commit()
-        logger.info(f"before refresh: {hero=}")
-        session.refresh(hero)
-
-        logger.info(f"after refresh: {hero=}")
-
-
-def delete_heroes():
-    with Session(engine) as session:
-        statement = select(Hero).where(Hero.name == "Doctor Strange")
-        results = session.exec(statement)
-        hero = results.one()
-        session.refresh(hero)
-
-        session.delete(hero)
-        session.commit()
-        logger.info(f"after delete: {hero=}")
+        # logger.info(f"found {len(list(results))} heroes")
+        for hero, team in results:
+            logger.info(f"{hero.name} is on team {team.name}")
 
 
 def main():
     create_db_and_tables()
     create_heroes()
+    select_heroes()
 
-
-#     select_heroes()
-#     update_heroes()
-#     delete_heroes()
-#
 
 if __name__ == "__main__":
     logger.info("main")
