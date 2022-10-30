@@ -20,7 +20,7 @@ class Hero(SQLModel, table=True):
         arbitrary_types_allowed = True
 
 
-sqlite_file_name = "db/database.db"
+sqlite_file_name = "db/database.sqlite"
 sqlite_url = f"sqlite:///{sqlite_file_name}"
 
 engine = create_engine(sqlite_url, echo=True)
