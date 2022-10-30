@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "sqlmodel-fun"
+version = "0.1.0"
+description = ""
+authors = ["Shota Shimizu <shota_shimizu@caddi.jp>"]
+readme = "README.md"
+packages = [{include = "sqlmodel_fun"}]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+sqlmodel = "^0.0.8"
+black = "^22.10.0"
+isort = "^5.10.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
